@@ -18,11 +18,20 @@ public class chatController {
 
     @GetMapping("/ia")
     public String preguntar(@RequestParam String mensaje) {
-        return chatClient.prompt()//inicia la conversacion
-                .user(mensaje)//capturar mensaje del suuario y enviarlo a openia
-                .call() //llamar a openia
-                .content(); //extraer respuesta
-    }
 
+        return chatClient.prompt()
+                .system("""
+                        Eres un asistente especializado en Informatica
+                        Reglas:
+                        - SOLO respondes sobre informatica.
+                        - Ayudas a entender informatica.
+                        - Responde claro y breve.
+                        - Si la pregunta NO es del tema, responde:
+                          "Solo puedo ayudarte con informatica."
+                        """)
+                .user(mensaje)
+                .call()
+                .content();
+    }
 
 }
